@@ -2,6 +2,11 @@
 import React, { useEffect } from 'react';
 import '../style.css';
 import Lenis from 'lenis';
+import Navbar from './ui/Navbar';
+import Sidebar from './ui/Sidebar';
+import MinSidebar from './ui/MinSidebar';
+
+
 
 // --- Mock Data ---
 const performanceData = [
@@ -19,83 +24,29 @@ const encounters = [
     { name: 'Alireza_F', rating: 2810, format: 'Rapid', time: 'Yesterday', result: '1 - 0', status: 'Victory', win: true },
 ];
 
-// --- Sub-components ---
 
-const TopNav = () => (
-    <nav className="fixed top-6 left-1/2 bg-black border border-black border-t-zinc-700 -translate-x-1/2 w-[calc(100%-3rem)] max-w-7xl z-50 glass-nav rounded-full px-9 py-3 flex justify-between items-center transition-all duration-300">
-        <div className="flex items-center gap-10 ">
-            <span className="text-xl font-black tracking-tighter text-white whitespace-nowrap">Productivity Chess</span>
-            <div className="hidden lg:flex items-center gap-8 text-sm font-medium">
-                <a className="text-white" href="#">Overview</a>
-                <a className="text-on-surface-variant hover:text-white transition-colors" href="#">Tournaments</a>
-                <a className="text-on-surface-variant hover:text-white transition-colors" href="#">Academy</a>
-            </div>
-        </div>
-        <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2">
-                <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <span className="material-symbols-outlined text-on-surface-variant">notifications</span>
-                </button>
-                <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
-                    <span className="material-symbols-outlined text-on-surface-variant">settings</span>
-                </button>
-            </div>
-            <button className="bg-white text-black px-5 py-2 rounded-full text-sm font-bold active:scale-95 transition-all">Play Now</button>
-            <div className="h-9 w-9 rounded-full overflow-hidden border border-white/20 ">
-                <div className="h-full w-full object-cover bg-black" />
-            </div>
-        </div>
-    </nav>
-);
 
-const Sidebar = () => (
-    <aside className="fixed left-6 top-28 bottom-6 w-20 hidden xl:flex flex-col items-center py-8 glass-nav rounded-3xl z-40">
-        <div className="mb-10 text-center">
-            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center mx-auto mb-2">
-                <span className="material-symbols-outlined text-black text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>chess</span>
-            </div>
-            <span className="text-[9px] font-black uppercase tracking-widest text-white/40">GM</span>
-        </div>
-        <nav className="flex-1 flex flex-col gap-8">
-            <a className="flex flex-col items-center gap-1 group" href="#">
-                <div className="w-12 h-12 bg-white/10 text-white rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
-                    <span className="material-symbols-outlined">chess</span>
-                </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-white">Play</span>
-            </a>
-            <a className="flex flex-col items-center gap-1 group" href="#">
-                <div className="w-12 h-12 text-on-surface-variant rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
-                    <span className="material-symbols-outlined">extension</span>
-                </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-white">Puzzles</span>
-            </a>
-            <a className="flex flex-col items-center gap-1 group" href="#">
-                <div className="w-12 h-12 text-on-surface-variant rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
-                    <span className="material-symbols-outlined">school</span>
-                </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-white">Learn</span>
-            </a>
-            <a className="flex flex-col items-center gap-1 group" href="#">
-                <div className="w-12 h-12 text-on-surface-variant rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
-                    <span className="material-symbols-outlined">query_stats</span>
-                </div>
-                <span className="text-[9px] font-bold uppercase tracking-widest text-on-surface-variant group-hover:text-white">Analysis</span>
-            </a>
-        </nav>
-        <div className="mt-auto flex flex-col gap-6">
-            <button className="text-on-surface-variant hover:text-white transition-colors">
-                <span className="material-symbols-outlined">help</span>
-            </button>
-            <button className="text-on-surface-variant hover:text-white transition-colors">
-                <span className="material-symbols-outlined">logout</span>
-            </button>
-        </div>
-    </aside>
-);
+
+
 
 // --- Main Page ---
 
 export default function GrandmasterDashboard() {
+    const updateStats = async (newElo: number, newDelta: number, newSolvedCount: number) => {
+        try {
+            await fetch("/api/updateStats", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    elo: newElo,
+                    delta_value: newDelta,
+                    puzzles_solved: newSolvedCount,
+                }),
+            });
+        } catch (error) {
+            console.error("Error updating stats:", error);
+        }
+    };
     useEffect(() => {
         const lenis = new Lenis();
 
@@ -110,10 +61,12 @@ export default function GrandmasterDashboard() {
         return () => {
             lenis.destroy(); // Cleanup on unmount
         };
+
     }, []);
+
     return (
         <div className="bg-background text-on-surface min-h-screen selection:bg-white selection:text-black">
-            <TopNav />
+            <Navbar />
             <Sidebar />
 
             {/* Main Content Area */}
@@ -160,8 +113,8 @@ export default function GrandmasterDashboard() {
                             <svg className="absolute bottom-0 left-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 1000 100">
                                 <defs>
                                     <linearGradient id="lineGrad" x1="0%" x2="0%" y1="0%" y2="100%">
-                                        <stop offset="0%" stop-color="white" stop-opacity="0.2"></stop>
-                                        <stop offset="100%" stop-color="white" stop-opacity="0"></stop>
+                                        <stop offset="0%" stopColor="white" stopOpacity="0.2"></stop>
+                                        <stop offset="100%" stopColor="white" stopOpacity="0"></stop>
                                     </linearGradient>
                                 </defs>
                                 <path d="M0,85 Q150,80 250,65 T450,70 T650,45 T850,50 T1000,25" fill="none" stroke="white" stroke-linecap="round" strokeWidth="3"></path>
@@ -265,25 +218,7 @@ export default function GrandmasterDashboard() {
             </main>
 
             {/* Bottom Nav (Mobile/Tablet) */}
-            <nav className="xl:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-lg z-50 glass-nav rounded-full px-8 py-3 flex justify-between items-center">
-                <button className="flex flex-col items-center gap-1 text-white">
-                    <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>chess</span>
-                    <span className="text-[8px] font-bold uppercase tracking-tighter">Play</span>
-                </button>
-                <button className="flex flex-col items-center gap-1 text-on-surface-variant">
-                    <span className="material-symbols-outlined">extension</span>
-                    <span className="text-[8px] font-bold uppercase tracking-tighter">Puzzles</span>
-                </button>
-                <button className="flex flex-col items-center gap-1 text-on-surface-variant">
-                    <span className="material-symbols-outlined">school</span>
-                    <span className="text-[8px] font-bold uppercase tracking-tighter">Learn</span>
-                </button>
-                <button className="flex flex-col items-center gap-1 text-on-surface-variant">
-                    <span className="material-symbols-outlined">query_stats</span>
-                    <span className="text-[8px] font-bold uppercase tracking-tighter">Stats</span>
-                </button>
-            </nav>
-
+            <MinSidebar />
             {/* FAB */}
             <button className="fixed bottom-24 right-6 xl:bottom-10 xl:right-10 w-14 h-14 bg-white text-black rounded-full flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all z-40">
                 <span className="material-symbols-outlined text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>add</span>

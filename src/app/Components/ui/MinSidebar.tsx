@@ -1,0 +1,27 @@
+import React from 'react'
+
+const MinSidebar = () => {
+    return (
+        <nav className="xl:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[calc(100%-3rem)] max-w-md z-50 glass-nav rounded-full px-8 py-3 flex justify-between items-center bg-black/90">
+            <button className="flex flex-col items-center gap-1 text-white">
+                <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1" }}>chess</span>
+                <span className="text-[8px] font-bold uppercase tracking-tighter">Play</span>
+            </button>
+            <button className="flex flex-col items-center gap-1 text-neutral-500">
+                <span className="material-symbols-outlined text-xl">extension</span>
+                <span className="text-[8px] font-bold uppercase tracking-tighter">Puzzles</span>
+            </button>
+            <button className="flex flex-col items-center gap-1 text-neutral-500">
+                <span className="material-symbols-outlined text-xl">school</span>
+                <span className="text-[8px] font-bold uppercase tracking-tighter">Learn</span>
+            </button>
+            <button className="flex flex-col items-center gap-1 text-neutral-500">
+                <span className="material-symbols-outlined text-xl">query_stats</span>
+                <span className="text-[8px] font-bold uppercase tracking-tighter">Stats</span>
+            </button>
+        </nav>
+
+    )
+}
+
+export default MinSidebar
