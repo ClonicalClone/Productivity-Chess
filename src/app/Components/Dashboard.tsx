@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect } from 'react';
+import { useSession } from "next-auth/react";
 import '../style.css';
 import Lenis from 'lenis';
 import Navbar from './ui/Navbar';
@@ -32,6 +33,7 @@ const encounters = [
 // --- Main Page ---
 
 export default function GrandmasterDashboard() {
+    const { data: session } = useSession();
     const updateStats = async (newElo: number, newDelta: number, newSolvedCount: number) => {
         try {
             await fetch("/api/updateStats", {
@@ -83,8 +85,8 @@ export default function GrandmasterDashboard() {
                         <div>
                             <h3 className="text-on-surface-variant text-[10px] font-bold uppercase tracking-[0.2em] mb-4">Current Rating</h3>
                             <div className="flex items-baseline gap-3">
-                                <span className="text-7xl md:text-8xl font-black tracking-tighter text-white">2842</span>
-                                <span className="text-white/60 font-bold text-xl">+12</span>
+                                <span className="text-7xl md:text-8xl font-black tracking-tighter text-white">{(session?.user as any)?.elo ?? 2842}</span>
+                                <span className="text-white/60 font-bold text-xl">{(session?.user as any)?.delta_value > 0 ? '+' : ''}{(session?.user as any)?.delta_value ?? 12}</span>
                             </div>
                             <p className="text-on-surface-variant text-sm mt-3 font-medium">Grandmaster Title • Top 0.1% Globally</p>
                         </div>
@@ -202,7 +204,7 @@ export default function GrandmasterDashboard() {
                             </div>
                             <div className="bg-surface p-6 rounded-2xl border border-white/5">
                                 <span className="text-[9px] font-bold text-on-surface-variant uppercase tracking-widest block mb-2">Puzzles</span>
-                                <span className="text-2xl font-black text-white">1,242</span>
+                                <span className="text-2xl font-black text-white">{(session?.user as any)?.puzzles_solved ?? "1,242"}</span>
                             </div>
                         </div>
 

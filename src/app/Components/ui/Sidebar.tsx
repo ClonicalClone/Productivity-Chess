@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'next/link'
 
 const Sidebar = () => {
     return (
@@ -12,30 +13,30 @@ const Sidebar = () => {
                 <span className="font-['Inter'] text-[9px] font-black uppercase tracking-widest text-white/40 mt-2">GM</span>
             </div>
             <nav className="flex-1 flex flex-col gap-8">
-                <a className="flex flex-col items-center gap-1 group" href="#">
+                <Link className="flex flex-col items-center gap-1 group" href="/">
                     <div className="w-12 h-12 bg-white/10 text-white rounded-2xl flex items-center justify-center group-hover:bg-white group-hover:text-black transition-all">
                         <span className="material-symbols-outlined text-xl">chess</span>
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-white">Play</span>
-                </a>
-                <a className="flex flex-col items-center gap-1 group" href="#">
+                </Link>
+                <Link className="flex flex-col items-center gap-1 group" href="/puzzles">
                     <div className="w-12 h-12 text-neutral-500 rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
                         <span className="material-symbols-outlined text-xl">extension</span>
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 group-hover:text-white">Puzzles</span>
-                </a>
-                <a className="flex flex-col items-center gap-1 group" href="#">
+                </Link>
+                <Link className="flex flex-col items-center gap-1 group" href="/learn">
                     <div className="w-12 h-12 text-neutral-500 rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
                         <span className="material-symbols-outlined text-xl">school</span>
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 group-hover:text-white">Learn</span>
-                </a>
-                <a className="flex flex-col items-center gap-1 group" href="#">
+                </Link>
+                <Link className="flex flex-col items-center gap-1 group" href="/stats">
                     <div className="w-12 h-12 text-neutral-500 rounded-2xl flex items-center justify-center group-hover:text-white transition-all">
                         <span className="material-symbols-outlined text-xl">query_stats</span>
                     </div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-neutral-500 group-hover:text-white">Stats</span>
-                </a>
+                </Link>
             </nav>
             <div className="mt-auto flex flex-col gap-6">
                 <button className="text-neutral-500 hover:text-white transition-colors">
